@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-
     fun onDeleteButtonClick(student: Student) {
         studentViewModel.delete(student)
     }

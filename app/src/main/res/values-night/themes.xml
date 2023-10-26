@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Student" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#3F51B5</item>
+        <!-- <item name="android:windowTranslucentStatus">true</item> <item name="android:windowTranslucentNavigation">true</item>
+      -->
     </style>
 </resources>
