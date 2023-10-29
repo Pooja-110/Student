@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Filter the student list based on the user's input
+
                 studentAdapter.filter.filter(newText)
                 return true
             }
