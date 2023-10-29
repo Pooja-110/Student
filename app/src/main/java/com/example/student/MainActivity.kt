@@ -31,11 +31,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
-
         studentViewModel = ViewModelProvider(this).get(StudentViewModel::class.java)
+
         studentViewModel.allStudents.observe(this, Observer<List<Student>> { students ->
             studentAdapter.setStudents(students)
         })
+
 
         searchView = findViewById(R.id.searchView)
 

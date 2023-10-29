@@ -86,7 +86,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun updateStudent(student: Student) {
-
         val updatedStudent = Student(
             student.id,
             nameEditText.text.toString().trim(),
@@ -104,4 +103,5 @@ class RegisterActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
 }
