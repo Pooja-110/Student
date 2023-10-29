@@ -78,8 +78,18 @@ class StudentAdapter(private val mainActivity: MainActivity, private var student
             genderTextView.text = "Gender: ${student.genderText}"
             coursestartdate.text = "Course Date: ${student.coursedateText}"
             studID.text = "Student ID: ${student.sid}"
+            updateButton.setOnClickListener {
+                mainActivity.onUpdateButtonClick(student)
+            }
+
+
+            deleteButton.setOnClickListener {
+                mainActivity.onDeleteButtonClick(student)
+            }
         }
+
     }
+
 
     fun setStudents(students: List<Student>) {
         this.students = students

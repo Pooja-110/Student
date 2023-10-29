@@ -55,12 +55,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onUpdateButtonClick(student: Student) {
+
         val intent = Intent(this, RegisterActivity::class.java)
         intent.putExtra("student", student)
         startActivity(intent)
     }
 
     fun onDeleteButtonClick(student: Student) {
+
         studentViewModel.delete(student)
     }
 }
