@@ -1,15 +1,16 @@
 package com.example.student
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class StudentAdapter(mainActivity: MainActivity, result: List<Student>) : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+class StudentAdapter(private val mainActivity: MainActivity, private var students: List<Student>) :
+    RecyclerView.Adapter<StudentAdapter.StudentViewHolder>(), Filterable {
 
-    private var students: List<Student> = result
-    private val mainActivity: MainActivity = mainActivity
+    private var filteredStudents: List<Student> = students
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_student, parent, false)
@@ -17,20 +18,46 @@ class StudentAdapter(mainActivity: MainActivity, result: List<Student>) : Recycl
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        val currentStudent = students[position]
+        val currentStudent = filteredStudents[position]
         holder.bind(currentStudent)
     }
 
     override fun getItemCount(): Int {
-        return students.size
+        return filteredStudents.size
     }
 
-    fun setStudents(students: List<Student>) {
-        this.students = students
-        notifyDataSetChanged()
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filteredList = mutableListOf<Student>()
+                if (constraint.isNullOrBlank()) {
+                    filteredList.addAll(students)
+                } else {
+                    val filterPattern = constraint.toString().toLowerCase().trim()
+                    for (student in students) {
+                        if (student.name.toLowerCase().contains(filterPattern)) {
+                            filteredList.add(student)
+                        }
+                    }
+                }
+                val results = FilterResults()
+                results.values = filteredList
+                return results
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                if (results?.values is List<*>) {
+                    filteredStudents = results.values as List<Student>
+                } else {
+                    filteredStudents = emptyList()
+                }
+                notifyDataSetChanged()
+            }
+        }
     }
 
     inner class StudentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         private val ageTextView: TextView = itemView.findViewById(R.id.ageTextView)
         private val fatherNameTextView: TextView = itemView.findViewById(R.id.fname)
@@ -51,16 +78,12 @@ class StudentAdapter(mainActivity: MainActivity, result: List<Student>) : Recycl
             genderTextView.text = "Gender: ${student.genderText}"
             coursestartdate.text = "Course Date: ${student.coursedateText}"
             studID.text = "Student ID: ${student.sid}"
-
-
-            updateButton.setOnClickListener {
-                mainActivity.onUpdateButtonClick(student)
-            }
-
-
-            deleteButton.setOnClickListener {
-                mainActivity.onDeleteButtonClick(student)
-            }
         }
+    }
+
+    fun setStudents(students: List<Student>) {
+        this.students = students
+        this.filteredStudents = students
+        notifyDataSetChanged()
     }
 }

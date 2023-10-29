@@ -3,6 +3,7 @@ package com.example.student
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var studentAdapter: StudentAdapter
     private lateinit var studentViewModel: StudentViewModel
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +33,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         studentViewModel = ViewModelProvider(this).get(StudentViewModel::class.java)
-
         studentViewModel.allStudents.observe(this, Observer<List<Student>> { students ->
             studentAdapter.setStudents(students)
+        })
+
+        searchView = findViewById(R.id.searchView)
+
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the student list based on the user's input
+                studentAdapter.filter.filter(newText)
+                return true
+            }
         })
     }
 
@@ -46,5 +63,4 @@ class MainActivity : AppCompatActivity() {
     fun onDeleteButtonClick(student: Student) {
         studentViewModel.delete(student)
     }
-
 }
